@@ -8,6 +8,7 @@
 	import { m } from "$lib/paraglide/messages";
 	import { ToastManager } from "$lib/util/toast.svelte";
 	import { DISABLE_ALL_EXTERNAL_REQUESTS } from "$lib/util/consts";
+	import { inview } from "$lib/actions/inview";
 
 	let settings = $state(Settings.Settings.instance.settings);
 
@@ -54,7 +55,10 @@
 </script>
 
 <div class="flex flex-col h-full items-center">
-	<h1 class="hidden md:block text-[40px] tracking-tight leading-[72px] mb-6">
+	<h1
+		use:inview
+		class="hidden md:block text-[40px] tracking-tight leading-[72px] mb-6"
+	>
 		<SettingsIcon size="40" class="inline-block -mt-2 mr-2" />
 		{m["settings.title"]()}
 	</h1>
@@ -63,18 +67,28 @@
 		class="w-full max-w-[1280px] flex flex-col md:flex-row gap-4 p-4 md:px-4 md:py-0"
 	>
 		<div class="flex flex-col gap-4 flex-1">
-			<Settings.Conversion bind:settings />
+			<div use:inview={{ delay: 40 }}>
+				<Settings.Conversion bind:settings />
+			</div>
 			{#if !DISABLE_ALL_EXTERNAL_REQUESTS}
-				<Settings.Vertd bind:settings />
+				<div use:inview={{ delay: 100 }}>
+					<Settings.Vertd bind:settings />
+				</div>
 			{:else if PUB_PLAUSIBLE_URL}
-				<Settings.Privacy bind:settings />
+				<div use:inview={{ delay: 100 }}>
+					<Settings.Privacy bind:settings />
+				</div>
 			{/if}
 		</div>
 
 		<div class="flex flex-col gap-4 flex-1">
-			<Settings.Appearance />
+			<div use:inview={{ delay: 70 }}>
+				<Settings.Appearance />
+			</div>
 			{#if PUB_PLAUSIBLE_URL && !DISABLE_ALL_EXTERNAL_REQUESTS}
-				<Settings.Privacy bind:settings />
+				<div use:inview={{ delay: 130 }}>
+					<Settings.Privacy bind:settings />
+				</div>
 			{/if}
 		</div>
 	</div>

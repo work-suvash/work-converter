@@ -22,13 +22,13 @@ args = "Start application"
 name = "Start application"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "bun run dev --host 0.0.0.0 --port 5000"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+waitForPort = 5000
 
 [[ports]]
 localPort = 5000
@@ -38,3 +38,15 @@ externalPort = 80
 deploymentTarget = "static"
 build = ["bun", "run", "build"]
 publicDir = "build"
+
+[userenv]
+
+[userenv.shared]
+PUB_ENV = "development"
+PUB_DISABLE_FAILURE_BLOCKS = "false"
+PUB_DISABLE_ALL_EXTERNAL_REQUESTS = "false"
+PUB_VERTD_URL = "https://vertd.vert.sh"
+PUB_PLAUSIBLE_URL = ""
+PUB_HOSTNAME = ""
+PUB_DONATION_URL = ""
+PUB_STRIPE_KEY = ""

@@ -2,10 +2,14 @@
 	import { m } from "$lib/paraglide/messages";
 	import { link, sanitize } from "$lib/store/index.svelte";
 	import { ShieldCheckIcon } from "lucide-svelte";
+	import { inview } from "$lib/actions/inview";
 </script>
 
 <div class="flex flex-col h-full items-center">
-	<h1 class="hidden md:block text-[40px] tracking-tight leading-[72px] mb-6">
+	<h1
+		use:inview
+		class="hidden md:block text-[40px] tracking-tight leading-[72px] mb-6"
+	>
 		<ShieldCheckIcon size="40" class="inline-block -mt-2 mr-2" />
 		{m["privacy.title"]()}
 	</h1>
@@ -13,14 +17,17 @@
 	<div
 		class="w-full max-w-[1280px] flex flex-col md:flex-row gap-4 p-4 md:px-4 md:py-0"
 	>
-		<div class="bg-panel rounded-2xl p-6 shadow-panel text-lg font-normal">
+		<div
+			use:inview={{ delay: 60 }}
+			class="bg-panel rounded-2xl p-6 shadow-panel text-lg font-normal"
+		>
 			<h2 class="text-2xl mb-3">{m["privacy.summary.title"]()}</h2>
 			<p class="mb-4">
 				{@html sanitize(
 					link(
 						["vert_link"],
 						m["privacy.summary.description"](),
-						["https://vert.sh"],
+						["https://work-pdf.com"],
 						[true],
 					),
 				)}
@@ -93,7 +100,7 @@
 					link(
 						["email_link"],
 						m["privacy.contact.description"](),
-						["mailto:hello@vert.sh"],
+						["mailto:hello@work-pdf.com"],
 						[false],
 					),
 				)}

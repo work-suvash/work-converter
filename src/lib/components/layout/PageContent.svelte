@@ -3,7 +3,7 @@
 	import { duration } from "$lib/util/animation";
 	import { goingLeft, isMobile } from "$lib/store/index.svelte";
 	import { quintOut } from "svelte/easing";
-	import { fly, fade } from "$lib/util/animation";
+	import { fade } from "$lib/util/animation";
 
 	let { children } = $props();
 </script>
@@ -12,30 +12,18 @@
 	{#key page.url.pathname}
 		<div
 			class="row-start-1 col-start-1"
-			in:fly={{
-				x: $goingLeft ? -window.innerWidth : window.innerWidth,
-				duration,
+			in:fade={{
+				duration: Math.round(duration * 0.6),
 				easing: quintOut,
-				delay: 25,
+				delay: 20,
 			}}
-			out:fly={{
-				x: $goingLeft ? window.innerWidth : -window.innerWidth,
-				duration,
+			out:fade={{
+				duration: Math.round(duration * 0.4),
 				easing: quintOut,
 			}}
 		>
 			<div
 				class="flex flex-col h-full pt-4 md:pt-8 pb-32"
-				in:fade={{
-					duration,
-					easing: quintOut,
-					delay: $isMobile ? 0 : 100,
-				}}
-				out:fade={{
-					duration,
-					easing: quintOut,
-					delay: $isMobile ? 0 : 200,
-				}}
 			>
 				{@render children()}
 			</div>

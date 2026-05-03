@@ -4,7 +4,6 @@
 	import { setTheme, files, goingLeft } from "$lib/store/index.svelte";
 	import { duration, fade } from "$lib/util/animation";
 	import {
-		InfoIcon,
 		MoonIcon,
 		RefreshCw,
 		SettingsIcon,
@@ -14,7 +13,6 @@
 	} from "lucide-svelte";
 	import { quintOut } from "svelte/easing";
 	import clsx from "clsx";
-	import Logo from "$lib/components/visual/svg/Logo.svelte";
 	import { m } from "$lib/paraglide/messages";
 
 	const items = $derived<
@@ -46,12 +44,6 @@
 			activeMatch: (pathname) => pathname.startsWith("/settings"),
 			icon: SettingsIcon,
 		},
-		{
-			name: m["navbar.about"](),
-			url: "/about/",
-			activeMatch: (pathname) => pathname.startsWith("/about"),
-			icon: InfoIcon,
-		},
 	]);
 
 	beforeNavigate((e) => {
@@ -66,45 +58,32 @@
 </script>
 
 <header class="hidden md:block sticky top-0 z-50">
-	<div
-		class="border-b border-separator backdrop-blur-xl"
-		style="background: var(--bg-header);"
-	>
-		<div
-			class="max-w-7xl mx-auto px-8 h-16 flex items-center justify-between"
-		>
-			<!-- Logo -->
-			<a
-				href="/"
-				class="flex items-center bg-accent text-on-accent rounded-xl px-4 h-10 gap-2 flex-shrink-0 nav-logo"
-				draggable={false}
-			>
-				<div class="h-4 w-24 flex items-center">
-					<Logo />
-				</div>
+	<div class="border-b border-separator backdrop-blur-md" style="background: var(--bg-header);">
+		<div class="max-w-7xl mx-auto px-6 h-14 flex items-center gap-8">
+
+			<!-- Logo: plain text -->
+			<a href="/" class="logo-link flex-shrink-0" draggable={false}>
+				Work-PDF
 			</a>
 
 			<!-- Nav items -->
-			<nav class="flex items-center gap-1">
+			<nav class="flex items-center gap-1 flex-1">
 				{#each items as item}
 					{@const Icon = item.icon}
 					{@const isActive = item.activeMatch(page.url.pathname)}
 					<a
 						href={item.url}
-						class={clsx(
-							"relative flex items-center gap-2 px-4 py-2 rounded-xl font-medium nav-link",
-							isActive
-								? "bg-panel-highlight text-foreground active"
-								: "text-muted hover:text-foreground hover:bg-panel-highlight/60",
+						class={clsx("nav-link flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium",
+							isActive ? "active text-foreground" : "text-muted"
 						)}
 						draggable={false}
 					>
 						<div class="relative flex-shrink-0">
-							<Icon size={18} />
+							<Icon size={16} />
 							{#if item.badge}
 								<div
-									class="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 rounded-full bg-badge text-on-badge flex items-center justify-center font-display font-medium"
-									style="font-size: 0.6rem;"
+									class="absolute -top-1.5 -right-1.5 min-w-[14px] h-3.5 px-0.5 rounded-full bg-accent text-on-accent flex items-center justify-center font-medium"
+									style="font-size: 0.55rem;"
 									in:fade={{ duration, easing: quintOut }}
 									out:fade={{ duration, easing: quintOut }}
 								>
@@ -120,36 +99,48 @@
 			<!-- Theme toggle -->
 			<button
 				onclick={() => {
-					const isDark =
-						document.documentElement.classList.contains("dark");
+					const isDark = document.documentElement.classList.contains("dark");
 					setTheme(isDark ? "light" : "dark");
 				}}
-				class="w-10 h-10 flex items-center justify-center rounded-xl text-muted hover:text-foreground hover:bg-panel-highlight transition-all duration-300 flex-shrink-0"
+				class="theme-btn w-8 h-8 flex items-center justify-center rounded-lg text-muted flex-shrink-0"
 				aria-label="Toggle theme"
 			>
-				<SunIcon class="dynadark:hidden block" size={20} />
-				<MoonIcon class="dynadark:block hidden" size={20} />
+				<SunIcon class="dynadark:hidden block" size={16} />
+				<MoonIcon class="dynadark:block hidden" size={16} />
 			</button>
 		</div>
 	</div>
 </header>
 
 <style lang="postcss">
-	.nav-logo {
-		transition: opacity 0.25s ease, transform 0.25s ease;
+	.logo-link {
+		font-size: 0.95rem;
+		font-weight: 700;
+		color: var(--fg);
+		letter-spacing: -0.02em;
+		transition: opacity 0.2s ease;
 	}
-	.nav-logo:hover {
-		opacity: 0.88;
-		transform: scale(1.02);
+	.logo-link:hover {
+		opacity: 0.65;
 	}
 
 	.nav-link {
-		transition: color 0.25s ease, background-color 0.25s ease, transform 0.2s ease;
+		transition: color 0.18s ease, background-color 0.18s ease;
 	}
 	.nav-link:hover {
-		transform: translateY(-1px);
+		color: var(--fg);
+		background-color: var(--bg-panel-highlight);
 	}
 	.nav-link.active {
-		transition: color 0.25s ease, background-color 0.25s ease;
+		color: var(--fg-accent);
+		background-color: transparent;
+	}
+
+	.theme-btn {
+		transition: color 0.18s ease, background-color 0.18s ease;
+	}
+	.theme-btn:hover {
+		color: var(--fg);
+		background-color: var(--bg-panel-highlight);
 	}
 </style>
