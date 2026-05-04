@@ -18,6 +18,10 @@ author = "agent"
 task = "workflow.run"
 args = "Start application"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Mockup Preview Server"
+
 [[workflows.workflow]]
 name = "Start application"
 author = "agent"
@@ -30,9 +34,30 @@ task = "shell.exec"
 args = "npm run dev"
 waitForPort = 5000
 
+[[workflows.workflow]]
+name = "Mockup Preview Server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd artifacts/mockup-sandbox && node_modules/.bin/vite --config vite.config.ts --host 0.0.0.0"
+waitForPort = 3000
+
+[workflows.workflow.metadata]
+outputType = "console"
+isCanvasWorkflow = true
+
+[[ports]]
+localPort = 3000
+externalPort = 3000
+
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 23636
+externalPort = 3001
 
 [deployment]
 deploymentTarget = "static"
@@ -42,11 +67,11 @@ publicDir = "build"
 [userenv]
 
 [userenv.shared]
-PUB_ENV = "development"
+PUB_ENV = "production"
 PUB_DISABLE_FAILURE_BLOCKS = "false"
 PUB_DISABLE_ALL_EXTERNAL_REQUESTS = "false"
 PUB_VERTD_URL = "https://vertd.vert.sh"
 PUB_PLAUSIBLE_URL = ""
 PUB_HOSTNAME = ""
-PUB_DONATION_URL = ""
-PUB_STRIPE_KEY = ""
+PUB_DONATION_URL = "https://donations.vert.sh"
+PUB_STRIPE_KEY = "pk_live_51RDVmAGSxPVad6bQwzVNnbc28nlmzA30krLWk1fefCMpUPiSRPkavMMbGqa8A3lUaOCMlsUEVy2CWDYg0ip3aPpL00ZJlsMkf2"

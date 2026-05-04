@@ -1,6 +1,6 @@
-# Work-PDF
+# Work-Converter
 
-Work-PDF is a file conversion utility built with SvelteKit and TypeScript. It uses WebAssembly to convert files (images, audio, documents, video) directly on the user's device.
+Work-Converter is a file conversion utility built with SvelteKit and TypeScript. It uses WebAssembly to convert files (images, audio, documents, video) directly on the user's device.
 
 ## Tech Stack
 
@@ -28,9 +28,9 @@ Work-PDF is a file conversion utility built with SvelteKit and TypeScript. It us
 
 ## Branding
 
-Rebranded from "VERT" / "VERT.sh" to **Work-PDF** throughout all visible UI:
-- `src/lib/util/consts.ts` — `VERT_NAME` now returns `"Work-PDF"`
-- `src/lib/components/visual/svg/Logo.svelte` — SVG text wordmark "Work-PDF"
+Rebranded from "VERT" / "VERT.sh" to **Work-Converter** throughout all visible UI:
+- `src/lib/util/consts.ts` — `VERT_NAME` now returns `"Work-Converter"`
+- `src/lib/components/visual/svg/Logo.svelte` — SVG text wordmark "Work-Converter"
 - `src/lib/paraglide/messages/en.js` — copyright and "supports…" strings updated
 - About page (`src/routes/about/`) and about sections (`src/lib/sections/about/`) removed entirely
 - Footer (`src/lib/components/layout/Footer.svelte`) removed entirely

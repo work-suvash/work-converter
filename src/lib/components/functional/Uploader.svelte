@@ -58,23 +58,19 @@
 <button
 	onclick={uploadFiles}
 	bind:this={uploaderButton}
-	class={clsx(
-		`uploader-btn ${$effects ? "" : "!scale-100"} ${classList}`,
-	)}
+	class={clsx(`uploader-btn ${$effects ? "" : "!scale-100"} ${classList}`)}
 >
-	<div class="uploader-inner flex justify-center items-center w-full h-full flex-col gap-4 pointer-events-none">
+	<div class="uploader-inner flex justify-center items-center w-full h-full flex-col gap-3 pointer-events-none">
 		<div class="upload-icon-wrap">
-			<UploadIcon class="w-7 h-7 text-on-accent" />
+			<UploadIcon class="w-6 h-6 text-on-accent" />
 		</div>
 		<div class="text-center">
-			<p class="text-lg font-semibold">
+			<p class="text-base font-semibold">
 				{m["upload.uploader.text"]({
 					action: m["upload.uploader.convert"]()
 				})}
 			</p>
-			<p class="text-sm font-normal text-muted mt-1">
-				or drag &amp; drop your files here
-			</p>
+			<p class="text-xs font-normal text-muted mt-0.5">Max file size: 500MB</p>
 		</div>
 	</div>
 </button>
@@ -103,7 +99,7 @@
 	}
 
 	.upload-icon-wrap {
-		@apply w-16 h-16 rounded-2xl flex items-center justify-center;
+		@apply w-14 h-14 rounded-xl flex items-center justify-center;
 		background: var(--accent);
 		box-shadow: 0 4px 20px hsla(239, 84%, 56%, 0.35);
 		transition: transform 0.3s ease, box-shadow 0.3s ease;

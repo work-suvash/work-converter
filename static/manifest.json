@@ -1,6 +1,6 @@
 {
-        "name": "Work-PDF",
-        "short_name": "Work-PDF",
+        "name": "Work-Converter",
+        "short_name": "Work-Converter",
         "description": "The file converter you'll love",
         "start_url": "/",
         "display": "standalone",
