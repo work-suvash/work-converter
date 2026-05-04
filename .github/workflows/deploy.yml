@@ -49,6 +49,22 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Clean up old artifacts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get all artifacts for this workflow run
+          ARTIFACTS=$(gh api repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts --paginate --jq '.artifacts[] | select(.name=="github-pages") | .id')
+          
+          # Convert to array and delete all but the last one
+          ARTIFACT_ARRAY=($ARTIFACTS)
+          if [ ${#ARTIFACT_ARRAY[@]} -gt 1 ]; then
+            for ((i=0; i<${#ARTIFACT_ARRAY[@]}-1; i++)); do
+              echo "Deleting artifact: ${ARTIFACT_ARRAY[$i]}"
+              gh api repos/${{ github.repository }}/actions/artifacts/${ARTIFACT_ARRAY[$i]} -X DELETE
+            done
+          fi
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
