@@ -57,7 +57,7 @@
 		"p-queue": "^9.0.1",
 		"riff-file": "^1.0.3",
 		"sanitize-html": "^2.17.0",
-		"svelte-stripe": "^1.4.0",
+		"svelte-stripe": "^2.0.0",
 		"vert-wasm": "^0.0.2",
 		"vite-plugin-wasm": "^3.5.0"
 	},

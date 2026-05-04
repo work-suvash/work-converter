@@ -137,7 +137,7 @@
         />
         <meta
                 name="description"
-                content="With Work-PDF, you can quickly convert any image, video, audio, and document file. No ads, no tracking, and all processing (other than video) is done on your device."
+                content="With Work-Converter, you can quickly convert any image, video, audio, and document file. No ads, no tracking, and all processing (other than video) is done on your device."
         />
         <meta property="og:type" content="website" />
         <meta
@@ -146,7 +146,7 @@
         />
         <meta
                 property="og:description"
-                content="With Work-PDF, you can quickly convert any image, video, audio, and document file. No ads, no tracking, and all processing (other than video) is done on your device."
+                content="With Work-Converter, you can quickly convert any image, video, audio, and document file. No ads, no tracking, and all processing (other than video) is done on your device."
         />
         <meta name="twitter:card" content="summary_large_image" />
         <link rel="manifest" href="/manifest.json" />

@@ -8,13 +8,7 @@
 		updateLocale,
 		availableLocales,
 	} from "$lib/store/index.svelte";
-	import {
-		MoonIcon,
-		PaletteIcon,
-		PauseIcon,
-		PlayIcon,
-		SunIcon,
-	} from "lucide-svelte";
+	import { MoonIcon, PaletteIcon, SunIcon } from "lucide-svelte";
 	import { onMount, onDestroy } from "svelte";
 	import { m } from "$lib/paraglide/messages";
 	import { getLocale } from "$lib/paraglide/runtime";
@@ -34,166 +28,98 @@
 		getLanguageDisplayName(locale),
 	);
 
-	let lightElement: HTMLButtonElement;
-	let darkElement: HTMLButtonElement;
-	let enableEffectsElement: HTMLButtonElement;
-	let disableEffectsElement: HTMLButtonElement;
-
-	let effectsUnsubscribe: () => void;
-	let themeUnsubscribe: () => void;
-
-	const updateEffectsClasses = (value: boolean) => {
-		if (value) {
-			enableEffectsElement.classList.add("selected");
-			disableEffectsElement.classList.remove("selected");
-		} else {
-			disableEffectsElement.classList.add("selected");
-			enableEffectsElement.classList.remove("selected");
-		}
-	};
-
-	const updateThemeClasses = (value: string) => {
-		document.documentElement.classList.remove("light", "dark");
-		document.documentElement.classList.add(value);
-
-		if (value === "dark") {
-			darkElement.classList.add("selected");
-			lightElement.classList.remove("selected");
-		} else {
-			lightElement.classList.add("selected");
-			darkElement.classList.remove("selected");
-		}
-	};
-
-	onMount(() => {
-		effectsUnsubscribe = effects.subscribe(updateEffectsClasses);
-		themeUnsubscribe = theme.subscribe(updateThemeClasses);
-
-		currentLocale = localStorage.getItem("locale") || getLocale();
-	});
-
-	onDestroy(() => {
-		if (effectsUnsubscribe) effectsUnsubscribe();
-		if (themeUnsubscribe) themeUnsubscribe();
-	});
-
-	$effect(() => {
-		updateEffectsClasses($effects);
-		updateThemeClasses($theme);
-	});
-
 	function handleLanguageChange(selectedLanguage: string) {
 		const selectedLocale = Object.keys(availableLocales).find(
 			(locale) => getLanguageDisplayName(locale) === selectedLanguage,
 		);
-
 		if (selectedLocale && selectedLocale !== currentLocale) {
 			currentLocale = selectedLocale;
 			updateLocale(selectedLocale);
 		}
 	}
+
+	onMount(() => {
+		currentLocale = localStorage.getItem("locale") || getLocale();
+	});
 </script>
 
-<Panel class="flex flex-col gap-8 p-6">
-	<div class="flex flex-col gap-3">
-		<h2 class="text-2xl font-bold">
-			<PaletteIcon
-				size="40"
-				class="inline-block -mt-1 mr-2 bg-accent-purple p-2 rounded-full"
-				color="black"
+<Panel class="flex flex-col gap-0 p-0 overflow-hidden">
+	<!-- Header -->
+	<div class="flex items-center gap-3 px-6 pt-5 pb-4">
+		<div class="flex items-center justify-center w-9 h-9 rounded-full bg-accent-purple/15">
+			<PaletteIcon size="18" class="text-accent-purple-alt" />
+		</div>
+		<h2 class="text-lg font-bold text-fg">{m["settings.appearance.title"]()}</h2>
+	</div>
+
+	<div class="flex flex-col gap-5 px-6 pb-5">
+		<!-- Theme mode -->
+		<div class="flex flex-col gap-2">
+			<label class="text-sm font-semibold text-fg">
+				{m["settings.appearance.brightness_theme"]()}
+			</label>
+			<div class="grid grid-cols-2 gap-3">
+				<button
+					onclick={() => setTheme("light")}
+					class="flex flex-col items-center gap-2 py-4 rounded-xl border-2 transition-all duration-200 cursor-pointer
+					       {$theme === 'light'
+					         ? 'border-accent bg-accent/5 text-accent-alt'
+					         : 'border-separator bg-panel text-muted hover:bg-panel-highlight'}"
+				>
+					<SunIcon size="22" />
+					<span class="text-sm font-semibold">{m["settings.appearance.light"]()}</span>
+				</button>
+				<button
+					onclick={() => setTheme("dark")}
+					class="flex flex-col items-center gap-2 py-4 rounded-xl border-2 transition-all duration-200 cursor-pointer
+					       {$theme === 'dark'
+					         ? 'border-accent bg-accent/5 text-accent-alt dynadark:text-accent'
+					         : 'border-separator bg-panel text-muted hover:bg-panel-highlight'}"
+				>
+					<MoonIcon size="22" />
+					<span class="text-sm font-semibold">{m["settings.appearance.dark"]()}</span>
+				</button>
+			</div>
+		</div>
+
+		<!-- Effect settings — toggle switch -->
+		<div class="flex items-center justify-between py-3 border-t border-separator">
+			<div class="flex items-center gap-3">
+				<div class="grid grid-cols-2 gap-[3px] w-5 h-5 opacity-60">
+					{#each Array(4) as _}
+						<div class="rounded-[2px] bg-current"></div>
+					{/each}
+				</div>
+				<span class="text-sm font-semibold text-fg">
+					{m["settings.appearance.effect_settings"]()}
+				</span>
+			</div>
+			<!-- Toggle switch -->
+			<button
+				role="switch"
+				aria-checked={$effects}
+				onclick={() => setEffects(!$effects)}
+				class="relative w-12 h-6 rounded-full transition-colors duration-200 cursor-pointer flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/50
+				       {$effects ? 'bg-accent' : 'bg-separator'}"
+			>
+				<span
+					class="absolute top-[3px] w-[18px] h-[18px] bg-white rounded-full shadow-sm transition-all duration-200
+					       {$effects ? 'left-[26px]' : 'left-[3px]'}"
+				></span>
+			</button>
+		</div>
+
+		<!-- Language -->
+		<div class="flex flex-col gap-2 border-t border-separator pt-4">
+			<label class="text-sm font-semibold text-fg">
+				{m["settings.language.title"]()}{#if currentLocale !== "en"} (Language){/if}
+			</label>
+			<Dropdown
+				options={languageOptions}
+				settingsStyle
+				selected={getLanguageDisplayName(currentLocale)}
+				onselect={handleLanguageChange}
 			/>
-			{m["settings.appearance.title"]()}
-		</h2>
-		<div class="flex flex-col gap-8">
-			<div class="flex flex-col gap-4">
-				<div class="flex flex-col gap-2">
-					<p class="text-base font-bold">
-						{m["settings.appearance.brightness_theme"]()}
-					</p>
-					<p class="text-sm text-muted font-normal italic">
-						{m["settings.appearance.brightness_description"]()}
-					</p>
-				</div>
-				<div class="flex flex-col gap-3 w-full">
-					<div class="flex gap-3 w-full">
-						<button
-							bind:this={lightElement}
-							onclick={() => setTheme("light")}
-							class="btn {$effects
-								? ''
-								: '!scale-100'} flex-1 p-4 rounded-lg text-black dynadark:text-white flex items-center justify-center"
-						>
-							<SunIcon size="24" class="inline-block mr-2" />
-							{m["settings.appearance.light"]()}
-						</button>
-
-						<button
-							bind:this={darkElement}
-							onclick={() => setTheme("dark")}
-							class="btn {$effects
-								? ''
-								: '!scale-100'} flex-1 p-4 rounded-lg text-black flex items-center justify-center"
-						>
-							<MoonIcon size="24" class="inline-block mr-2" />
-							{m["settings.appearance.dark"]()}
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="flex flex-col gap-4">
-				<div class="flex flex-col gap-2">
-					<p class="text-base font-bold">
-						{m["settings.appearance.effect_settings"]()}
-					</p>
-					<p class="text-sm text-muted font-normal italic">
-						{m["settings.appearance.effect_description"]()}
-					</p>
-				</div>
-				<div class="flex flex-col gap-3 w-full">
-					<div class="flex gap-3 w-full">
-						<button
-							bind:this={enableEffectsElement}
-							onclick={() => setEffects(true)}
-							class="btn {$effects
-								? ''
-								: '!scale-100'} flex-1 p-4 rounded-lg text-black dynadark:text-white flex items-center justify-center"
-						>
-							<PlayIcon size="24" class="inline-block mr-2" />
-							{m["settings.appearance.enable"]()}
-						</button>
-
-						<button
-							bind:this={disableEffectsElement}
-							onclick={() => setEffects(false)}
-							class="btn {$effects
-								? ''
-								: '!scale-100'} flex-1 p-4 rounded-lg text-black dynadark:text-white flex items-center justify-center"
-						>
-							<PauseIcon size="24" class="inline-block mr-2" />
-							{m["settings.appearance.disable"]()}
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="flex flex-col gap-4">
-				<div class="flex flex-col gap-2">
-					<p class="text-base font-bold">
-						{m["settings.language.title"]()}
-						{#if currentLocale !== "en"} (Language){/if}
-					</p>
-					<p class="text-sm text-muted font-normal italic">
-						{m["settings.language.description"]()}
-					</p>
-				</div>
-				<div class="flex flex-col gap-3 w-full">
-					<Dropdown
-						options={languageOptions}
-						settingsStyle
-						selected={getLanguageDisplayName(currentLocale)}
-						onselect={handleLanguageChange}
-					/>
-				</div>
-			</div>
 		</div>
 	</div>
 </Panel>
