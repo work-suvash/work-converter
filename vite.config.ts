@@ -73,6 +73,7 @@ export default defineConfig(({ command }) => {
                 },
                 build: {
                         target: "esnext",
+                        chunkSizeWarningLimit: 1000,
                 },
                 define: {
                         __COMMIT_HASH__: JSON.stringify(commitHash),
